@@ -1,8 +1,59 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Search, Youtube } from "lucide-react";
+
+const PHRASES = [
+  "Paste YouTube video URL here...",
+  "https://youtube.com/watch?v=...",
+  "Drop any YouTube link to analyze...",
+  "Try a music video, tutorial, or vlog...",
+];
+
+function useTypewriter(phrases) {
+  const [displayed, setDisplayed] = useState("");
+  const [phraseIdx, setPhraseIdx] = useState(0);
+  const [charIdx, setCharIdx] = useState(0);
+  const [deleting, setDeleting] = useState(false);
+
+  useEffect(() => {
+    const current = phrases[phraseIdx];
+    let delay;
+
+    if (!deleting && charIdx < current.length) {
+      delay = 55;
+      const t = setTimeout(() => {
+        setDisplayed(current.slice(0, charIdx + 1));
+        setCharIdx((c) => c + 1);
+      }, delay);
+      return () => clearTimeout(t);
+    }
+
+    if (!deleting && charIdx === current.length) {
+      delay = 1600;
+      const t = setTimeout(() => setDeleting(true), delay);
+      return () => clearTimeout(t);
+    }
+
+    if (deleting && charIdx > 0) {
+      delay = 28;
+      const t = setTimeout(() => {
+        setDisplayed(current.slice(0, charIdx - 1));
+        setCharIdx((c) => c - 1);
+      }, delay);
+      return () => clearTimeout(t);
+    }
+
+    if (deleting && charIdx === 0) {
+      setDeleting(false);
+      setPhraseIdx((p) => (p + 1) % phrases.length);
+    }
+  }, [charIdx, deleting, phraseIdx, phrases]);
+
+  return displayed;
+}
 
 export function UrlInput({ onAnalyze, loading }) {
   const [url, setUrl] = useState("");
+  const placeholder = useTypewriter(PHRASES);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -19,7 +70,7 @@ export function UrlInput({ onAnalyze, loading }) {
           type="url"
           value={url}
           onChange={(e) => setUrl(e.target.value)}
-          placeholder="Paste YouTube video URL here..."
+          placeholder={placeholder}
           className="flex-1 outline-none text-slate-700 placeholder-slate-400 text-base py-2.5 bg-transparent min-w-0"
           disabled={loading}
           required

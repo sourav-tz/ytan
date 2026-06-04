@@ -17,7 +17,7 @@ export default function App() {
   const { status, result, error, analyze, reset } = useAnalysis();
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-slate-50 via-white to-rose-50/40">
+    <div className="min-h-screen flex flex-col bg-linear-to-br from-slate-50 via-white to-rose-50/40">
       {/* Header */}
       <header className="bg-white/80 backdrop-blur-md border-b border-slate-200/70 sticky top-0 z-20 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3.5 flex items-center gap-3">
@@ -25,8 +25,8 @@ export default function App() {
             <Youtube size={20} />
           </div>
           <div>
-            <h1 className="text-base font-bold text-slate-900 tracking-tight leading-none">YtAna</h1>
-            <p className="text-[11px] text-slate-500 mt-0.5">AI-Powered Comment Analyzer</p>
+            <h1 className="text-base font-bold text-slate-900 tracking-tight leading-none">YtAn</h1>
+            <p className="text-[11px] text-slate-500 mt-0.5">Comment Analyzer</p>
           </div>
 
           <div className="ml-auto flex items-center gap-3">
@@ -42,15 +42,11 @@ export default function App() {
         </div>
       </header>
 
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 py-10 space-y-8">
+      <main className="flex-1 max-w-7xl mx-auto px-4 sm:px-6 py-10 space-y-8">
 
         {/* Hero */}
         {status !== "success" && (
           <div className="text-center space-y-6 pt-6 pb-2">
-            <div className="inline-flex items-center gap-2 bg-red-50 text-red-600 text-xs font-semibold px-3.5 py-1.5 rounded-full border border-red-100">
-              <Sparkles size={12} />
-              Powered by AI Transformers
-            </div>
             <h2 className="text-4xl sm:text-5xl font-bold text-slate-900 leading-tight tracking-tight">
               Understand what your audience
               <br />
@@ -65,12 +61,14 @@ export default function App() {
             <UrlInput onAnalyze={analyze} loading={status === "loading"} />
 
             {/* Feature badges */}
-            <div className="flex flex-wrap justify-center gap-2 pt-2">
-              {["Sentiment Analysis", "Emotion Detection", "Toxic Filtering", "AI Insights", "Keyword Extraction"].map((f) => (
-                <span key={f} className="text-xs text-slate-500 bg-white border border-slate-200 px-3 py-1 rounded-full shadow-sm">
-                  {f}
-                </span>
-              ))}
+            <div className="overflow-hidden pt-2 w-full">
+              <div className="flex gap-4 animate-marquee w-max">
+                {[...["Sentiment Analysis", "Emotion Detection", "Toxic Filtering", "AI Insights", "Keyword Extraction"], ...["Sentiment Analysis", "Emotion Detection", "Toxic Filtering", "AI Insights", "Keyword Extraction"]].map((f, i) => (
+                  <span key={i} className="text-sm font-semibold px-5 py-2 rounded-full shadow-md whitespace-nowrap border bg-slate-100 text-slate-600 border-slate-300">
+                    {f}
+                  </span>
+                ))}
+              </div>
             </div>
           </div>
         )}
@@ -198,7 +196,7 @@ export default function App() {
 
       <footer className="max-w-7xl mx-auto px-4 sm:px-6 py-8 mt-4 border-t border-slate-100">
         <p className="text-center text-xs text-slate-400">
-          YtAna · AI-powered YouTube comment analysis
+          YtAn · Oz · © 2026 All rights reserved
         </p>
       </footer>
     </div>
