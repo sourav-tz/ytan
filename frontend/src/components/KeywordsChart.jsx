@@ -13,12 +13,12 @@ export function KeywordsChart({ data }) {
         <ResponsiveContainer width="100%" height={300}>
           <BarChart
             layout="vertical"
-            data={data.slice(0, 15)}
-            margin={{ top: 4, right: 24, left: 8, bottom: 4 }}
+            data={data.slice(0, 10)}
+            margin={{ top: 4, right: 16, left: 4, bottom: 4 }}
           >
             <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" horizontal={false} />
-            <XAxis type="number" tick={{ fontSize: 11, fill: "#94a3b8" }} axisLine={false} tickLine={false} />
-            <YAxis type="category" dataKey="word" tick={{ fontSize: 12, fill: "#64748b" }} axisLine={false} tickLine={false} width={80} />
+            <XAxis type="number" tick={{ fontSize: 10, fill: "#94a3b8" }} axisLine={false} tickLine={false} />
+            <YAxis type="category" dataKey="word" tick={{ fontSize: 11, fill: "#64748b" }} axisLine={false} tickLine={false} width={65} />
             <Tooltip
               contentStyle={{ borderRadius: "10px", border: "1px solid #f1f5f9", boxShadow: "0 4px 12px rgba(0,0,0,0.06)" }}
               cursor={{ fill: "#f8fafc" }}

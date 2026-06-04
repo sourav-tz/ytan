@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { UrlInput } from "./components/UrlInput";
 import { LoadingState } from "./components/LoadingState";
 import { VideoHeader } from "./components/VideoHeader";
@@ -7,20 +8,22 @@ import { EmotionChart } from "./components/EmotionChart";
 import { KeywordsChart } from "./components/KeywordsChart";
 import { InsightsPanel } from "./components/InsightsPanel";
 import { CommentsTable } from "./components/CommentsTable";
+import { VideoDownloader } from "./components/VideoDownloader";
 import { useAnalysis } from "./hooks/useAnalysis";
 import {
   Youtube, RefreshCw, AlertCircle, MessageCircle,
-  TrendingUp, TrendingDown, ShieldX, Sparkles,
+  TrendingUp, TrendingDown, ShieldX, Search, Download,
 } from "lucide-react";
 
 export default function App() {
   const { status, result, error, analyze, reset } = useAnalysis();
+  const [mode, setMode] = useState("analyze");
 
   return (
     <div className="min-h-screen flex flex-col bg-linear-to-br from-slate-50 via-white to-rose-50/40">
       {/* Header */}
-      <header className="bg-white/80 backdrop-blur-md border-b border-slate-200/70 sticky top-0 z-20 shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3.5 flex items-center gap-3">
+      <header className="bg-white/80 backdrop-blur-md border-b border-slate-200/70 fixed top-0 left-0 right-0 z-50 shadow-sm">
+        <div className="w-full px-4 sm:px-6 py-3.5 flex items-center gap-3">
           <div className="bg-linear-to-br from-red-500 to-rose-600 text-white p-2 rounded-xl shadow-lg shadow-red-200">
             <Youtube size={20} />
           </div>
@@ -29,54 +32,75 @@ export default function App() {
             <p className="text-[11px] text-slate-500 mt-0.5">Comment Analyzer</p>
           </div>
 
-          <div className="ml-auto flex items-center gap-3">
-            {status === "success" && (
+          <div className="ml-auto flex items-center gap-2">
+            {mode === "analyze" && status === "success" && (
               <button
                 onClick={reset}
-                className="flex items-center gap-2 text-sm font-medium text-slate-600 hover:text-slate-900 bg-slate-100 hover:bg-slate-200 px-3.5 py-1.5 rounded-xl transition-all duration-200"
+                className="flex items-center gap-1.5 text-sm font-medium text-slate-600 hover:text-slate-900 bg-slate-100 hover:bg-slate-200 px-2.5 sm:px-3.5 py-1.5 rounded-xl transition-all duration-200"
               >
-                <RefreshCw size={13} /> New Analysis
+                <RefreshCw size={13} />
+                <span className="hidden sm:inline">New Analysis</span>
               </button>
             )}
+            <div className="flex bg-slate-100 rounded-xl p-1 gap-1">
+              <button
+                onClick={() => setMode("analyze")}
+                className={`flex items-center gap-1 px-2.5 sm:px-3 py-1.5 rounded-lg text-xs sm:text-sm font-semibold transition-all duration-200 ${mode === "analyze" ? "bg-white shadow-sm text-slate-900" : "text-slate-500 hover:text-slate-700"}`}
+              >
+                <Search size={12} /> Analyze
+              </button>
+              <button
+                onClick={() => setMode("download")}
+                className={`flex items-center gap-1 px-2.5 sm:px-3 py-1.5 rounded-lg text-xs sm:text-sm font-semibold transition-all duration-200 ${mode === "download" ? "bg-white shadow-sm text-slate-900" : "text-slate-500 hover:text-slate-700"}`}
+              >
+                <Download size={12} /> Download
+              </button>
+            </div>
           </div>
         </div>
       </header>
 
-      <main className="flex-1 max-w-7xl mx-auto px-4 sm:px-6 py-10 space-y-8">
+      <main className="flex-1 max-w-7xl mx-auto px-4 sm:px-6 pt-24 pb-10 space-y-8">
+
+        {/* Download Mode */}
+        {mode === "download" && <VideoDownloader />}
 
         {/* Hero */}
-        {status !== "success" && (
-          <div className="text-center space-y-6 pt-6 pb-2">
-            <h2 className="text-4xl sm:text-5xl font-bold text-slate-900 leading-tight tracking-tight">
-              Understand what your audience
-              <br />
-              <span className="bg-linear-to-r from-red-500 via-rose-500 to-pink-500 bg-clip-text text-transparent">
-                really thinks
-              </span>
-            </h2>
-            <p className="text-slate-500 text-base sm:text-lg max-w-2xl mx-auto leading-relaxed">
-              Paste any YouTube URL to get AI-powered sentiment analysis, emotion detection,
-              toxic comment filtering, and actionable insights.
-            </p>
-            <UrlInput onAnalyze={analyze} loading={status === "loading"} />
+        {mode === "analyze" && status !== "success" && (
+          <>
+            <div className="text-center space-y-5 pt-4 pb-2 w-full max-w-3xl mx-auto">
+              <h2 className="text-xl sm:text-4xl lg:text-5xl font-bold text-slate-900 leading-tight tracking-tight">
+                Understand what your audience
+                <br />
+                <span className="bg-linear-to-r from-red-500 via-rose-500 to-pink-500 bg-clip-text text-transparent">
+                  really thinks
+                </span>
+              </h2>
+              <p className="text-slate-500 text-sm sm:text-base max-w-xl mx-auto leading-relaxed">
+                Paste any YouTube URL to get AI-powered sentiment analysis, emotion detection,
+                toxic comment filtering, and actionable insights.
+              </p>
+              <UrlInput onAnalyze={analyze} loading={status === "loading"} />
+            </div>
 
-            {/* Feature badges */}
-            <div className="overflow-hidden pt-2 w-full">
-              <div className="flex gap-4 animate-marquee w-max">
-                {[...["Sentiment Analysis", "Emotion Detection", "Toxic Filtering", "AI Insights", "Keyword Extraction"], ...["Sentiment Analysis", "Emotion Detection", "Toxic Filtering", "AI Insights", "Keyword Extraction"]].map((f, i) => (
-                  <span key={i} className="text-sm font-semibold px-5 py-2 rounded-full shadow-md whitespace-nowrap border bg-slate-100 text-slate-600 border-slate-300">
+            {/* Feature badges — outside constrained container */}
+            <div className="marquee-wrap">
+              <div className="marquee-track">
+                {[...["Sentiment Analysis", "Emotion Detection", "Toxic Filtering", "AI Insights", "Keyword Extraction"],
+                  ...["Sentiment Analysis", "Emotion Detection", "Toxic Filtering", "AI Insights", "Keyword Extraction"]].map((f, i) => (
+                  <span key={i} className="marquee-item text-sm font-semibold px-5 py-2 rounded-full shadow-sm border bg-slate-100 text-slate-600 border-slate-300 inline-block">
                     {f}
                   </span>
                 ))}
               </div>
             </div>
-          </div>
+          </>
         )}
 
-        {status === "loading" && <LoadingState />}
+        {mode === "analyze" && status === "loading" && <LoadingState />}
 
         {/* Error */}
-        {status === "error" && (
+        {mode === "analyze" && status === "error" && (
           <div className="max-w-md mx-auto bg-white border border-red-100 rounded-2xl p-8 text-center space-y-4 shadow-xl shadow-red-50">
             <div className="w-14 h-14 bg-red-50 rounded-2xl flex items-center justify-center mx-auto">
               <AlertCircle className="text-red-500" size={28} />
@@ -95,7 +119,7 @@ export default function App() {
         )}
 
         {/* Results */}
-        {status === "success" && result && (
+        {mode === "analyze" && status === "success" && result && (
           <div className="space-y-6">
             <VideoHeader
               videoId={result.video_id}

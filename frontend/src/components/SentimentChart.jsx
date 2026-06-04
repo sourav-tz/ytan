@@ -22,19 +22,17 @@ export function SentimentChart({ data }) {
               data={chartData}
               cx="50%"
               cy="50%"
-              innerRadius={65}
-              outerRadius={100}
+              innerRadius={60}
+              outerRadius={90}
               paddingAngle={3}
               dataKey="value"
-              label={({ name, pct }) => `${name} ${pct}%`}
-              labelLine={false}
             >
               {chartData.map((_, i) => (
                 <Cell key={i} fill={COLORS[i]} />
               ))}
             </Pie>
-            <Tooltip formatter={(v, name) => [v, name]} />
-            <Legend />
+            <Tooltip formatter={(v, name, props) => [`${v} (${props.payload.pct}%)`, name]} />
+            <Legend iconType="circle" iconSize={10} />
           </PieChart>
         </ResponsiveContainer>
       </div>

@@ -28,19 +28,19 @@ export function CommentsTable({ comments }) {
   return (
     <div className="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
       {/* Header */}
-      <div className="px-5 py-4 border-b border-slate-100 flex items-center justify-between flex-wrap gap-3">
+      <div className="px-4 sm:px-5 py-4 border-b border-slate-100 flex items-center justify-between flex-wrap gap-3">
         <div className="flex items-center gap-2">
           <span className="w-1 h-4 rounded-full bg-linear-to-b from-slate-400 to-slate-600 inline-block" />
           <h3 className="text-sm font-semibold text-slate-700">
             Comments <span className="text-slate-400 font-normal">({filtered.length})</span>
           </h3>
         </div>
-        <div className="flex gap-1.5">
+        <div className="flex gap-1.5 flex-wrap">
           {FILTERS.map((f) => (
             <button
               key={f}
               onClick={() => { setFilter(f); setPage(0); }}
-              className={`px-3 py-1 rounded-lg text-xs font-medium capitalize transition-all duration-200 ${
+              className={`px-2.5 sm:px-3 py-1 rounded-lg text-xs font-medium capitalize transition-all duration-200 ${
                 filter === f ? FILTER_STYLES[f] : "bg-slate-100 text-slate-500 hover:bg-slate-200"
               }`}
             >
@@ -50,8 +50,29 @@ export function CommentsTable({ comments }) {
         </div>
       </div>
 
-      {/* Table */}
-      <div className="overflow-x-auto">
+      {/* Mobile card layout */}
+      <div className="block sm:hidden p-3 space-y-3">
+        {slice.map((c) => (
+          <div key={c.id} className="bg-slate-50 rounded-xl p-3.5 border border-slate-100">
+            <div className="flex items-center justify-between mb-2 gap-2">
+              <span className="font-semibold text-slate-700 text-sm truncate">{c.author}</span>
+              <span className={`px-2.5 py-0.5 rounded-full text-xs font-medium capitalize shrink-0 ${SENTIMENT_BADGE[c.sentiment]}`}>
+                {c.sentiment}
+              </span>
+            </div>
+            <p className="text-sm text-slate-600 line-clamp-3 leading-relaxed">{c.text}</p>
+            <div className="flex items-center gap-3 mt-2.5 text-xs text-slate-400">
+              <span className="flex items-center gap-1"><ThumbsUp size={11} /> {c.likes}</span>
+              <span className="capitalize">{c.emotion}</span>
+              {c.is_toxic && <span className="flex items-center gap-1 text-rose-500"><ShieldAlert size={11} /> Toxic</span>}
+              {c.is_spam && <span className="flex items-center gap-1 text-amber-500"><Trash2 size={11} /> Spam</span>}
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Desktop table layout */}
+      <div className="hidden sm:block overflow-x-auto">
         <table className="w-full text-sm">
           <thead>
             <tr className="bg-slate-50 border-b border-slate-100">
@@ -71,9 +92,7 @@ export function CommentsTable({ comments }) {
                 key={c.id}
                 className={`border-b border-slate-50 hover:bg-slate-50/70 transition-colors ${i % 2 === 0 ? "" : "bg-slate-50/30"}`}
               >
-                <td className="px-5 py-3.5 font-medium text-slate-700 whitespace-nowrap max-w-30 truncate">
-                  {c.author}
-                </td>
+                <td className="px-5 py-3.5 font-medium text-slate-700 whitespace-nowrap max-w-30 truncate">{c.author}</td>
                 <td className="px-5 py-3.5 text-slate-600 max-w-xs">
                   <p className="line-clamp-2 leading-relaxed">{c.text}</p>
                 </td>
@@ -86,8 +105,8 @@ export function CommentsTable({ comments }) {
                 <td className="px-3 py-3.5 text-center text-slate-500 text-xs font-medium">{c.likes}</td>
                 <td className="px-3 py-3.5 text-center">
                   <div className="flex justify-center gap-1">
-                    {c.is_toxic && <ShieldAlert size={14} className="text-rose-500" aria-label="Toxic" />}
-                    {c.is_spam && <Trash2 size={14} className="text-amber-500" aria-label="Spam" />}
+                    {c.is_toxic && <ShieldAlert size={14} className="text-rose-500" />}
+                    {c.is_spam && <Trash2 size={14} className="text-amber-500" />}
                   </div>
                 </td>
               </tr>
@@ -98,7 +117,7 @@ export function CommentsTable({ comments }) {
 
       {/* Pagination */}
       {pages > 1 && (
-        <div className="px-5 py-4 border-t border-slate-100 flex items-center justify-between">
+        <div className="px-4 sm:px-5 py-4 border-t border-slate-100 flex items-center justify-between">
           <span className="text-xs text-slate-400">{page * PER_PAGE + 1}–{Math.min((page + 1) * PER_PAGE, filtered.length)} of {filtered.length}</span>
           <div className="flex gap-2">
             <button
@@ -106,7 +125,7 @@ export function CommentsTable({ comments }) {
               disabled={page === 0}
               className="px-3 py-1.5 rounded-lg bg-slate-100 text-slate-600 disabled:opacity-40 text-xs font-medium hover:bg-slate-200 transition-colors"
             >
-              Previous
+              Prev
             </button>
             <span className="px-3 py-1.5 text-xs text-slate-500 bg-slate-50 rounded-lg border border-slate-100">
               {page + 1} / {pages}

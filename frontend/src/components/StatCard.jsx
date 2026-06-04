@@ -5,7 +5,7 @@ export function StatCard({ label, value, sub, icon: Icon, gradient = "from-slate
         <p className="text-xs font-semibold uppercase tracking-wider text-white/70">{label}</p>
         {Icon && <Icon size={18} className="text-white/60" />}
       </div>
-      <p className="text-3xl font-bold tracking-tight">{value}</p>
+      <p className="text-xl sm:text-3xl font-bold tracking-tight">{value}</p>
       {sub && <p className="text-xs text-white/60">{sub}</p>}
     </div>
   );

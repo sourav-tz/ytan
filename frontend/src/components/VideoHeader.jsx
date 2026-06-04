@@ -2,12 +2,12 @@ import { ExternalLink, MessageSquare } from "lucide-react";
 
 export function VideoHeader({ videoId, title, thumbnail, totalComments }) {
   return (
-    <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-5 flex gap-5 items-start">
+    <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-4 sm:p-5 flex flex-col sm:flex-row gap-4 sm:gap-5 items-start">
       {thumbnail && (
         <img
           src={thumbnail}
           alt={title}
-          className="w-36 h-20.25 object-cover rounded-xl shrink-0 shadow-md"
+          className="w-full sm:w-36 sm:h-20 h-44 object-cover rounded-xl shrink-0 shadow-md"
         />
       )}
       <div className="flex-1 min-w-0">
