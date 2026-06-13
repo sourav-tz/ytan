@@ -1,12 +1,9 @@
 const express = require('express');
 const router = express.Router();
-const ytDlpExec = require('yt-dlp-exec');
+const ytDlp = require('yt-dlp-exec');
 const path = require('path');
 const os = require('os');
 const fs = require('fs');
-
-const SYSTEM_BIN = '/usr/local/bin/yt-dlp';
-const ytDlp = fs.existsSync(SYSTEM_BIN) ? ytDlpExec.create(SYSTEM_BIN) : ytDlpExec;
 
 const QUALITY_LEVELS = [
   { value: '1080p', label: '1080p Full HD', min: 900,  max: 1200 },
