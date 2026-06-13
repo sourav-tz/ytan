@@ -15,14 +15,14 @@ const QUALITY_LEVELS = [
 ];
 
 const FORMAT_MAP = {
-  '1080p': 'best[height<=1080]/worst',
-  '720p':  'best[height<=720]/worst',
-  '480p':  'best[height<=480]/worst',
-  '360p':  'best[height<=360]/worst',
-  '240p':  'best[height<=240]/worst',
-  '144p':  'best[height<=144]/worst',
-  'm4a':   'bestaudio[ext=m4a][vcodec=none]/bestaudio[vcodec=none]/bestaudio',
-  'mp3':   'bestaudio[vcodec=none]/bestaudio',
+  '1080p': 'best[height<=1080][ext=mp4]/best[height<=1080]/best[ext=mp4]/best',
+  '720p':  'best[height<=720][ext=mp4]/best[height<=720]/best[ext=mp4]/best',
+  '480p':  'best[height<=480][ext=mp4]/best[height<=480]/best[ext=mp4]/best',
+  '360p':  'best[height<=360][ext=mp4]/best[height<=360]/best[ext=mp4]/best',
+  '240p':  'best[height<=240][ext=mp4]/best[height<=240]/best[ext=mp4]/best',
+  '144p':  'best[height<=144][ext=mp4]/best[height<=144]/best[ext=mp4]/best',
+  'm4a':   'bestaudio[ext=m4a]/bestaudio',
+  'mp3':   'bestaudio',
 };
 
 const MIME_MAP = {
