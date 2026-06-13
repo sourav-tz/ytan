@@ -1,9 +1,12 @@
 const express = require('express');
 const router = express.Router();
-const ytDlp = require('yt-dlp-exec');
+const ytDlpExec = require('yt-dlp-exec');
 const path = require('path');
 const os = require('os');
 const fs = require('fs');
+
+const SYSTEM_BIN = '/usr/local/bin/yt-dlp';
+const ytDlp = fs.existsSync(SYSTEM_BIN) ? ytDlpExec.create(SYSTEM_BIN) : ytDlpExec;
 
 const QUALITY_LEVELS = [
   { value: '1080p', label: '1080p Full HD', min: 900,  max: 1200 },
@@ -52,7 +55,7 @@ router.get('/download/info', async (req, res) => {
       noWarnings: true,
       noPlaylist: true,
       noCheckCertificates: true,
-      extractorArgs: 'youtube:player_client=android,web',
+      extractorArgs: 'youtube:player_client=ios,android,web',
     };
     if (fs.existsSync('/tmp/yt-cookies.txt')) infoOpts.cookies = '/tmp/yt-cookies.txt';
 
@@ -128,7 +131,7 @@ router.get('/download', async (req, res) => {
       noWarnings: true,
       noPlaylist: true,
       noCheckCertificates: true,
-      extractorArgs: 'youtube:player_client=android,web',
+      extractorArgs: 'youtube:player_client=ios,android,web',
     };
     if (fs.existsSync('/tmp/yt-cookies.txt')) opts.cookies = '/tmp/yt-cookies.txt';
 
