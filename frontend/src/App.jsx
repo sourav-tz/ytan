@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { UrlInput } from "./components/UrlInput";
 import { LoadingState } from "./components/LoadingState";
 import { VideoHeader } from "./components/VideoHeader";
@@ -8,16 +7,14 @@ import { EmotionChart } from "./components/EmotionChart";
 import { KeywordsChart } from "./components/KeywordsChart";
 import { InsightsPanel } from "./components/InsightsPanel";
 import { CommentsTable } from "./components/CommentsTable";
-import { VideoDownloader } from "./components/VideoDownloader";
 import { useAnalysis } from "./hooks/useAnalysis";
 import {
   Youtube, RefreshCw, AlertCircle, MessageCircle,
-  TrendingUp, TrendingDown, ShieldX, Search, Download,
+  TrendingUp, TrendingDown, ShieldX,
 } from "lucide-react";
 
 export default function App() {
   const { status, result, error, analyze, reset } = useAnalysis();
-  const [mode, setMode] = useState("analyze");
 
   return (
     <div className="min-h-screen flex flex-col bg-linear-to-br from-slate-50 via-white to-rose-50/40">
@@ -33,7 +30,7 @@ export default function App() {
           </div>
 
           <div className="ml-auto flex items-center gap-2">
-            {mode === "analyze" && status === "success" && (
+            {status === "success" && (
               <button
                 onClick={reset}
                 className="flex items-center gap-1.5 text-sm font-medium text-slate-600 hover:text-slate-900 bg-slate-100 hover:bg-slate-200 px-2.5 sm:px-3.5 py-1.5 rounded-xl transition-all duration-200"
@@ -42,31 +39,14 @@ export default function App() {
                 <span className="hidden sm:inline">New Analysis</span>
               </button>
             )}
-            <div className="flex bg-slate-100 rounded-xl p-1 gap-1">
-              <button
-                onClick={() => setMode("analyze")}
-                className={`flex items-center gap-1 px-2.5 sm:px-3 py-1.5 rounded-lg text-xs sm:text-sm font-semibold transition-all duration-200 ${mode === "analyze" ? "bg-white shadow-sm text-slate-900" : "text-slate-500 hover:text-slate-700"}`}
-              >
-                <Search size={12} /> Analyze
-              </button>
-              <button
-                onClick={() => setMode("download")}
-                className={`flex items-center gap-1 px-2.5 sm:px-3 py-1.5 rounded-lg text-xs sm:text-sm font-semibold transition-all duration-200 ${mode === "download" ? "bg-white shadow-sm text-slate-900" : "text-slate-500 hover:text-slate-700"}`}
-              >
-                <Download size={12} /> Download
-              </button>
-            </div>
           </div>
         </div>
       </header>
 
       <main className="flex-1 max-w-7xl mx-auto px-4 sm:px-6 pt-24 pb-10 space-y-8">
 
-        {/* Download Mode */}
-        {mode === "download" && <VideoDownloader />}
-
         {/* Hero */}
-        {mode === "analyze" && status !== "success" && (
+        {status !== "success" && (
           <>
             <div className="text-center space-y-5 pt-4 pb-2 w-full max-w-3xl mx-auto">
               <h2 className="text-xl sm:text-4xl lg:text-5xl font-bold text-slate-900 leading-tight tracking-tight">
@@ -97,10 +77,10 @@ export default function App() {
           </>
         )}
 
-        {mode === "analyze" && status === "loading" && <LoadingState />}
+        {status === "loading" && <LoadingState />}
 
         {/* Error */}
-        {mode === "analyze" && status === "error" && (
+        {status === "error" && (
           <div className="max-w-md mx-auto bg-white border border-red-100 rounded-2xl p-8 text-center space-y-4 shadow-xl shadow-red-50">
             <div className="w-14 h-14 bg-red-50 rounded-2xl flex items-center justify-center mx-auto">
               <AlertCircle className="text-red-500" size={28} />
@@ -119,7 +99,7 @@ export default function App() {
         )}
 
         {/* Results */}
-        {mode === "analyze" && status === "success" && result && (
+        {status === "success" && result && (
           <div className="space-y-6">
             <VideoHeader
               videoId={result.video_id}

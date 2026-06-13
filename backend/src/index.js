@@ -3,7 +3,6 @@ const express = require('express');
 const cors = require('cors');
 const fs = require('fs');
 const analyzeRouter = require('./routes/analyze');
-const downloadRouter = require('./routes/download');
 
 if (process.env.YOUTUBE_COOKIES_B64) {
   fs.writeFileSync(
@@ -20,7 +19,6 @@ app.use(cors());
 app.use(express.json());
 
 app.use('/api/v1', analyzeRouter);
-app.use('/api/v1', downloadRouter);
 
 app.listen(PORT, () => {
   console.log(`YtAna backend running on port ${PORT}`);
