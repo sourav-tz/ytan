@@ -51,6 +51,7 @@ class YouTubeService {
     const comments = [];
     let nextPageToken = null;
     const client = this._getClient();
+    console.log(`[fetchComments] maxComments=${config.maxComments}`);
 
     try {
       while (comments.length < config.maxComments) {
