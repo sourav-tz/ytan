@@ -47,13 +47,16 @@ router.get('/download/info', async (req, res) => {
   if (!url) return res.status(400).json({ detail: 'url is required' });
 
   try {
-    const info = await ytDlp(url, {
+    const infoOpts = {
       dumpSingleJson: true,
       noWarnings: true,
       noPlaylist: true,
       noCheckCertificates: true,
       extractorArgs: 'youtube:player_client=android,web',
-    });
+    };
+    if (fs.existsSync('/tmp/yt-cookies.txt')) infoOpts.cookies = '/tmp/yt-cookies.txt';
+
+    const info = await ytDlp(url, infoOpts);
 
     const formats = info.formats || [];
     const heightSize = {};
@@ -127,6 +130,7 @@ router.get('/download', async (req, res) => {
       noCheckCertificates: true,
       extractorArgs: 'youtube:player_client=android,web',
     };
+    if (fs.existsSync('/tmp/yt-cookies.txt')) opts.cookies = '/tmp/yt-cookies.txt';
 
     if (quality === 'mp3') {
       opts.extractAudio = true;
